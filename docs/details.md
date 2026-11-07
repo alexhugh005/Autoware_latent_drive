@@ -5,12 +5,12 @@ Reference material behind the [README](../README.md): building without the Autow
 
 ## Environment
 
-Two ways to build and run — Docker (matches the vehicle exactly) or a native
-build on the host. Both need the same stack:
+Two ways to build and run — Docker or a native build on the host. Both need
+the same stack:
 
-- **CUDA 12.8** and **TensorRT 10.8.0.43** — match the version the engine will
-  run against; a serialized engine is not portable across TensorRT versions, so
-  build and run must use the same one.
+- **CUDA** and **TensorRT 10**, in the versions that the engine runs with. The
+  vehicle uses CUDA 12.8 and TensorRT 10.8.0.43. A serialized engine is not
+  portable across TensorRT versions, so build and run must use the same one.
 - **cuDNN — not required.** TensorRT 10 does not depend on it and the planner
   uses no cuDNN path, so there is nothing to install.
 - **OpenCV 4**, **gflags**, **nlohmann-json**, **CMake ≥ 3.22**, **g++** (C++17).
