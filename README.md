@@ -38,7 +38,8 @@ TensorRT engines are built locally, on the GPU that runs them (below).
 
 Needs an NVIDIA GPU, Docker and the
 [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
-Everything runs in the public Autoware development image (ROS 2 humble, CUDA 12, TensorRT 10.8).
+Everything runs in the public Autoware development image `core-devel-cuda-jazzy` (ROS 2 jazzy, CUDA 13.0,
+TensorRT 10.13). CUDA 13.0 needs NVIDIA driver 580 or newer on the host.
 
 ```bash
 git clone https://github.com/autowarefoundation/autoware_latent_drive.git
@@ -49,7 +50,7 @@ hf download AutowareFoundation/latent_drive --revision v1.0.0 --local-dir models
 
 # a shell in the container, this repository at /workspace and a rosbag at /bag
 xhost +local:docker                                          # for the replay window
-IMAGE=ghcr.io/autowarefoundation/autoware:universe-devel-cuda BAG=/path/to/rosbag ./docker/run.sh
+IMAGE=ghcr.io/autowarefoundation/autoware:core-devel-cuda-jazzy BAG=/path/to/rosbag ./docker/run.sh
 ```
 
 In the container, build the library, the ROS 2 node and the engines (`models/engine/<name>-mixed.engine`):
