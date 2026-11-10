@@ -1,8 +1,9 @@
 name: autoware-index-validate
 
-# Build and test the package against the latest Autoware release, with the reusable workflow of
-# autoware-index-github-actions. That workflow reads the package sources and picks the container
-# image. This package uses CUDA and TensorRT, so it gets the core-devel-cuda image.
+# Build, test and run clang-tidy on the package against the latest Autoware release, with the
+# reusable workflow of autoware-index-github-actions. That workflow reads the package sources and
+# picks the container image. This package uses CUDA and TensorRT, so it gets the core-devel-cuda
+# image.
 
 on:
   push:
