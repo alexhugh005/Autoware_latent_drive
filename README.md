@@ -74,7 +74,7 @@ route points the vehicle fed its model (`/tensorrt_e2e/debug/latentdrive/route_p
 **Rosbag replay** ([`samples/rosbag`](samples/rosbag)): play the bag, plan on every front frame and draw the plan
 on the front camera, in a window and an mp4.
 
-The image uses CycloneDDS, which needs the [DDS settings of Autoware](https://autowarefoundation.github.io/autoware-documentation/main/installation/additional-settings-for-developers/network-configuration/dds-settings/) on the host. The replay is made for Fast DDS, which needs no host settings. Select it before the replay:
+The image uses CycloneDDS, which needs the [DDS settings of Autoware](https://docs.autoware.org/main/installation/additional-settings-for-developers/network-configuration/dds-settings/) on the host. The replay is made for Fast DDS, which needs no host settings. Select it before the replay:
 
 ```bash
 export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
