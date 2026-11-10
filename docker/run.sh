@@ -47,6 +47,10 @@ args=(
     --shm-size 8g
     -v "$REPO:/workspace"
     -w /workspace
+    # the Autoware images run as the user aw and give it these IDs, so the
+    # files written to /workspace belong to the host user
+    -e "HOST_UID=$(id -u)"
+    -e "HOST_GID=$(id -g)"
 )
 
 if [ -n "${DATA:-}" ]; then

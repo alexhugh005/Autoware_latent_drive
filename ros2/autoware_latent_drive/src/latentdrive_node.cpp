@@ -492,6 +492,7 @@ class LatentDriveNode : public rclcpp::Node {
         std::unique_lock<std::mutex> lock(plan_mutex_);
         plan_cv_.wait(lock, [this] { return plan_stop_ || ready_.has_value(); });
         if (plan_stop_) return;
+        if (!ready_) continue;
         job = std::move(*ready_);
         ready_.reset();
       }

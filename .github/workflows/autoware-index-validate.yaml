@@ -1,0 +1,27 @@
+name: autoware-index-validate
+
+# Build, test and run clang-tidy on the package against the latest Autoware release, with the
+# reusable workflow of autoware-index-github-actions. That workflow reads the package sources and
+# picks the container image. This package uses CUDA and TensorRT, so it gets the core-devel-cuda
+# image.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ros_distro: jazzy
+    uses: autowarefoundation/autoware-index-github-actions/.github/workflows/validate-package.yaml@main
+    with:
+      ros_distro: ${{ matrix.ros_distro }}
+      package_name: autoware_latent_drive
+      pull-ccache: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
+      push-ccache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      cache-key-element: build
+      concurrency-group: autoware-index-validate-${{ matrix.ros_distro }}-${{ github.event_name == 'push' && 'main' || github.ref }}

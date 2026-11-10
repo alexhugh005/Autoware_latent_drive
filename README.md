@@ -38,7 +38,8 @@ TensorRT engines are built locally, on the GPU that runs them (below).
 
 Needs an NVIDIA GPU, Docker and the
 [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
-Everything runs in the public Autoware development image (ROS 2 humble, CUDA 12, TensorRT 10.8).
+Everything runs in the public Autoware development image `core-devel-cuda-jazzy` (ROS 2 jazzy, CUDA 13.0,
+TensorRT 10.13). CUDA 13.0 needs NVIDIA driver 580 or newer on the host.
 
 ```bash
 git clone https://github.com/autowarefoundation/autoware_latent_drive.git
@@ -48,9 +49,12 @@ hf download AutowareFoundation/latent_drive --revision v1.0.0 --local-dir models
   --exclude "media/*" --exclude replay.mp4
 
 # a shell in the container, this repository at /workspace and a rosbag at /bag
+docker pull ghcr.io/autowarefoundation/autoware:core-devel-cuda-jazzy
 xhost +local:docker                                          # for the replay window
-IMAGE=ghcr.io/autowarefoundation/autoware:universe-devel-cuda BAG=/path/to/rosbag ./docker/run.sh
+IMAGE=ghcr.io/autowarefoundation/autoware:core-devel-cuda-jazzy BAG=/path/to/rosbag ./docker/run.sh
 ```
+
+The image runs the shell as the user `aw`. `docker/run.sh` gives `aw` your user and group ID, so you can write to this repository from the container.
 
 In the container, build the library, the ROS 2 node and the engines (`models/engine/<name>-mixed.engine`):
 
@@ -70,7 +74,10 @@ route points the vehicle fed its model (`/tensorrt_e2e/debug/latentdrive/route_p
 **Rosbag replay** ([`samples/rosbag`](samples/rosbag)): play the bag, plan on every front frame and draw the plan
 on the front camera, in a window and an mp4.
 
+The image uses CycloneDDS, which needs the [DDS settings of Autoware](https://docs.autoware.org/main/installation/additional-settings-for-developers/network-configuration/dds-settings/) on the host. The replay is made for Fast DDS, which needs no host settings. Select it before the replay:
+
 ```bash
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 samples/rosbag/prepare_bag.sh /bag bags/my_bag            # once per bag: a playable copy (symlinks + metadata.yaml)
 samples/rosbag/run_replay.sh bags/my_bag models/engine/camfront3-rptw-lane2-e1-mixed.engine \
   start_offset:=60 out_video:=bags/my_bag/replay.mp4

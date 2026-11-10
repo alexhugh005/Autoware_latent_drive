@@ -5,12 +5,12 @@ Reference material behind the [README](../README.md): building without the Autow
 
 ## Environment
 
-Two ways to build and run — Docker (matches the vehicle exactly) or a native
-build on the host. Both need the same stack:
+Two ways to build and run — Docker or a native build on the host. Both need
+the same stack:
 
-- **CUDA 12.8** and **TensorRT 10.8.0.43** — match the version the engine will
-  run against; a serialized engine is not portable across TensorRT versions, so
-  build and run must use the same one.
+- **CUDA** and **TensorRT 10**, in the versions that the engine runs with. The
+  vehicle uses CUDA 12.8 and TensorRT 10.8.0.43. A serialized engine is not
+  portable across TensorRT versions, so build and run must use the same one.
 - **cuDNN — not required.** TensorRT 10 does not depend on it and the planner
   uses no cuDNN path, so there is nothing to install.
 - **OpenCV 4**, **gflags**, **nlohmann-json**, **CMake ≥ 3.22**, **g++** (C++17).
@@ -18,12 +18,19 @@ build on the host. Both need the same stack:
 ### Option A — Docker (recommended)
 
 The public Autoware development image
-`ghcr.io/autowarefoundation/autoware:universe-devel-cuda` (ROS 2 humble, CUDA
-12, TensorRT 10.8.0.43) has everything; the [README](../README.md) uses it:
+`ghcr.io/autowarefoundation/autoware:core-devel-cuda-jazzy` (ROS 2 jazzy, CUDA
+13.0, TensorRT 10.13.3.9) has everything. The [README](../README.md) uses it:
 
 ```bash
-IMAGE=ghcr.io/autowarefoundation/autoware:universe-devel-cuda ./docker/run.sh
+IMAGE=ghcr.io/autowarefoundation/autoware:core-devel-cuda-jazzy ./docker/run.sh
 ```
+
+CUDA 13.0 needs NVIDIA driver 580 or newer on the host. A serialized engine is
+not portable across TensorRT versions, so an engine built in this image does
+not load with the TensorRT 10.8.0.43 of the vehicle. For ROS 2 humble with
+CUDA 12.8 and TensorRT 10.8.0.43 on amd64, use `universe-devel-cuda-humble`.
+`core-devel-cuda-humble` has no MCAP storage plugin for rosbag2, so
+`samples/rosbag/prepare_bag.sh` fails in it.
 
 Inside TIER IV, the **pilot-auto.xx1** deployment container (a private base
 image) links the same CUDA 12.8 / TensorRT 10.8 the vehicle runs. Setup and the
